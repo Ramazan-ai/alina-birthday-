@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Для нашей дочки</title>
+
+<style>
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Фото */
+#slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
+}
+
+/* Текст */
+#text {
+  position: absolute;
+  bottom: 20%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  padding: 0 60px;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.9);
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+/* Экран старта */
+#start {
+  position: absolute;
+  inset: 0;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  z-index: 10;
+}
+
+/* Кнопка YouTube */
+#videoBtn {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 22px 48px;
+  font-size: 28px;
+  background: rgba(255,255,255,0.95);
+  color: black;
+  border: none;
+  border-radius: 40px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#videoBtn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px white;
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">Нажмите OK 🤍</div>
+
+<img id="slide" src="photos/01.jpg">
+<div id="text"></div>
+
+<button id="videoBtn" tabindex="0">Посмотри 🤍</button>
+
+<audio id="music" src="music.mp3"></audio>
+
+<script>
+const photosCount = 20;
+let current = 1;
+
+const texts = [
+  "2002 год стал самым важным в нашей жизни",
+  "С твоим появлением мир стал другим",
+  "Мы видели, как ты росла",
+  "Как училась, мечтала, искала себя",
+  "Иногда было непросто",
+  "Но ты всегда находила силы идти дальше",
+  "Мы гордимся тобой каждый день",
+  "Ты — наше счастье",
+  "Ты — наша любовь",
+  "С днём рождения, родная",
+  "Мы всегда рядом",
+  "Мама и папа 🤍"
+];
+
+let textIndex = 0;
+
+const slide = document.getElementById("slide");
+const text = document.getElementById("text");
+const start = document.getElementById("start");
+const music = document.getElementById("music");
+const videoBtn = document.getElementById("videoBtn");
+
+function startShow() {
+  start.style.display = "none";
+  music.play().catch(() => {});
+  showText();
+  setInterval(changePhoto, 7000);
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") startShow();
+});
+
+function changePhoto() {
+  slide.style.opacity = 0;
+
+  setTimeout(() => {
+    current++;
+    if (current > photosCount) current = photosCount;
+    slide.src = `photos/${String(current).padStart(2,'0')}.jpg`;
+    slide.style.opacity = 1;
+    showText();
+  }, 2000);
+}
+
+function showText() {
+  if (textIndex >= texts.length) {
+    videoBtn.style.opacity = 1;
+    videoBtn.style.pointerEvents = "auto";
+    videoBtn.focus();
+    return;
+  }
+
+  text.style.opacity = 0;
+
+  setTimeout(() => {
+    text.innerText = texts[textIndex];
+    text.style.opacity = 1;
+    textIndex++;
+  }, 2000);
+}
+
+videoBtn.onclick = () => {
+  window.location.href = "https://youtube.com/ТВОЯ_ССЫЛКА";
+};
+</script>
+
+</body>
+</html>
